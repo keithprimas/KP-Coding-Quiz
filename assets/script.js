@@ -1,18 +1,16 @@
 var timerElement = document.getElementById('timer');
 var timeLeft = 60;
+var score = 100;
 
 function updateTimer() {
   timerElement.textContent = `Time left: ${timeLeft} seconds`;
   timeLeft--;
 
-  if (timeLeft < 0) {
+  if (timeLeft === 0) {
     clearInterval(timerInterval);
     console.log('Time is up! ');
-    noTime();
+    calculateScore();
   }
-}
-function noTime() {
-  alert("Time is up!")
 }
 
 var startButton = document.getElementById('startButton');
@@ -43,13 +41,14 @@ function handleIncorrectAnswer(selectedChoice) {
     "c) To log messages to the browser console"
   ];
 
+
   if (!correctOptions.includes(selectedChoice)) {
     timeLeft -= 5;
+    score -=20;
     updateTimer();
     alert('Incorrect answer');
   }
 }
-
 
 
 function displayQuestion(questionNumber) {
@@ -109,15 +108,49 @@ fifthChoicesSections.addEventListener("click", (e) => {
 });
 
 
-function handleSelection(event) {
- console.log(currentQuestionIndex)
- console.log(event.target)
-  // var currentQuestion = questions[currentQuestionIndex];
-  // var selectedAnswer = document.querySelector('input[name="answer"]:checked');
-   if (currentQuestionIndex < 4) {
-      currentQuestionIndex++; // Increment after checking the answer
-      displayQuestion(currentQuestionIndex);
-    } else {
-     clearInterval(timerInterval);
+
+  function calculateScore() {
+    totalScore = score 
+    alert('Total score: ' + score);
+    askToSaveScore();
+  }
+  
+  function askToSaveScore() {
+    var saveScore = confirm('Do you want to save your score?');
+    if (saveScore) {
+      saveInitialsAndScore();
     }
   }
+  
+  function saveInitialsAndScore() {
+    var initials = prompt('Enter your initials:');
+    if (initials) {
+      var user = {
+        initials: initials,
+        score: score,
+      };
+      var users = JSON.parse(localStorage.getItem('users')) || [];
+      users.push(user);
+      localStorage.setItem('users', JSON.stringify(users));
+      alert('Initials and score saved! Thank you! ');
+    } else {
+      alert('Invalid initials!');
+    }
+  }
+ 
+
+  function handleSelection(event) {
+    console.log(currentQuestionIndex)
+    console.log(event.target)
+     // var currentQuestion = questions[currentQuestionIndex];
+     // var selectedAnswer = document.querySelector('input[name="answer"]:checked');
+      if (currentQuestionIndex < 4) {
+         currentQuestionIndex++; // Increment after checking the answer
+         displayQuestion(currentQuestionIndex);
+       } else {
+        clearInterval(timerInterval);
+        alert('Quiz is over!');
+        calculateScore();
+        location.reload();
+       }
+     }
