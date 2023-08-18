@@ -15,3 +15,10 @@ WHEN all questions are answered or the timer reaches 0
 THEN the game is over
 WHEN the game is over
 THEN I can save my initials and score
+
+## Screenshot
+![Alt text](assets/screenshot.png)
+
+## Link 
+https://keithprimas.github.io/KP-Coding-Quiz/
+
